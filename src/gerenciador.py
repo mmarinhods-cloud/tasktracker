@@ -2,8 +2,10 @@
 
 if __package__:
     from .tarefa import Tarefa, criar_tarefa
+    from .utils import validar_prioridade, validar_titulo
 else:
     from tarefa import Tarefa, criar_tarefa
+    from utils import validar_prioridade, validar_titulo
 
 
 class GerenciadorTarefas:
@@ -18,12 +20,15 @@ class GerenciadorTarefas:
         prioridade: str,
         data_limite: str,
     ) -> Tarefa:
+        # Valida antes de adicionar: uma tentativa inválida não gera registro.
+        titulo = validar_titulo(titulo)
+        prioridade = validar_prioridade(prioridade)
         tarefa = criar_tarefa(
             len(self._tarefas) + 1,
-            titulo.strip(),
+            titulo,
             descricao.strip(),
             responsavel.strip(),
-            prioridade.strip(),
+            prioridade,
             data_limite.strip(),
         )
         self._tarefas.append(tarefa)

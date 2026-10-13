@@ -1,9 +1,13 @@
 """Interface de terminal do TaskTracker. Execute: python3 src/main.py."""
 
+from typing import Callable
+
 if __package__:
     from .gerenciador import GerenciadorTarefas
+    from .utils import validar_prioridade, validar_titulo
 else:
     from gerenciador import GerenciadorTarefas
+    from utils import validar_prioridade, validar_titulo
 
 
 def exibir_menu() -> None:
@@ -13,12 +17,23 @@ def exibir_menu() -> None:
     print("3. Sair da aplicação")
 
 
+def ler_valor_validado(mensagem: str, validador: Callable[[str], str]) -> str:
+    """Repete somente o campo inválido, preservando os demais dados digitados."""
+    while True:
+        try:
+            return validador(input(mensagem))
+        except ValueError as erro:
+            print(f"Erro: {erro}")
+
+
 def cadastrar_tarefa(gerenciador: GerenciadorTarefas) -> None:
     print("\n--- Cadastro de tarefa ---")
-    titulo = input("Título: ")
+    titulo = ler_valor_validado("Título: ", validar_titulo)
     descricao = input("Descrição (opcional): ")
     responsavel = input("Responsável (opcional): ")
-    prioridade = input("Prioridade (Alta, Média/Media ou Baixa): ")
+    prioridade = ler_valor_validado(
+        "Prioridade (Alta, Média/Media ou Baixa): ", validar_prioridade
+    )
     data_limite = input("Data limite (opcional, ex.: DD/MM/AAAA): ")
     gerenciador.cadastrar(titulo, descricao, responsavel, prioridade, data_limite)
     print("Tarefa cadastrada com sucesso.")
