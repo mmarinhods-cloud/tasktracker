@@ -67,9 +67,6 @@ tasktracker-projeto/
 ├── requirements.txt
 ├── docs/
 │   ├── planejamento_logico.pdf
-│   ├── analise_etapa_2.md
-│   ├── publicar_github.md
-│   └── roteiro_video.md
 ├── src/
 │   ├── __init__.py
 │   ├── main.py
